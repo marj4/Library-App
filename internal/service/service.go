@@ -14,6 +14,7 @@ type Book interface {
 
 type Books interface {
 	GetAllInfoForBook() ([]models.Book, error) //Вывод списка книг
+	//GetBookName() ([]string, error)
 }
 
 type SearchBook interface {
@@ -32,6 +33,8 @@ type Service struct {
 // Создаем сервис,в который заложим репозиторий
 func NewService(repo *repository2.Repository) *Service {
 	return &Service{
-		BookRepository: NewServiceCreateBook(repo.BookRepository),
+		Book:       nil,
+		Books:      NewBooksService(repo.Books),
+		SearchBook: nil,
 	}
 }

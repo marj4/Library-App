@@ -31,7 +31,7 @@ type Repository struct {
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{
 		Book:       nil,
-		Books:      nil,
+		Books:      NewBooksPostgres(db),
 		SearchBook: nil,
 	}
 }

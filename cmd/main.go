@@ -2,18 +2,15 @@
 package main
 
 import (
-	app2 "fyne.io/fyne/v2/app"
+	"fmt"
+	_ "github.com/lib/pq"
 	"library/config"
 	"library/internal/repository"
 	"library/internal/service"
-	"library/internal/ui"
 	"log"
 )
 
 func main() {
-	a := app2.New()
-	w := a.NewWindow("Library App")
-
 	//Run the config
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -33,9 +30,34 @@ func main() {
 	//Инициализация сервиса
 	srv := service.NewService(repo)
 
-	//Инициализация графического интерфейса
-	uiManager := ui.NewUIManager(w)
+	books, err := srv.GetAllInfoForBook()
+	if err != nil {
+		log.Fatalf("Cant get info for book:%v", err)
+	}
+	fmt.Println(books)
 
+	//a := app2.New()
+	//w := a.NewWindow("Библиотека")
+	//bookList := widget.NewList(
+	//	func() int {
+	//		books, _ := srv.GetAllInfoForBook()
+	//		return len(books)
+	//	},
+	//	func() fyne.CanvasObject { return widget.NewLabel("") },
+	//	func(i widget.ListItemID, obj fyne.CanvasObject) {
+	//		//books,_:= srv.GetAllInfoForBook()
+	//		obj.(*widget.Label).SetText("book1")
+	//	})
+	//w.SetContent(container.NewVBox(
+	//	widget.NewLabel("Список книг:"),
+	//	bookList,
+	//	widget.NewButton("Добавить книгу", func() {
+	//		// Здесь должен быть вызов метода backend для добавления книги
+	//	}),
+	//	widget.NewButton("Удалить книгу", func() {
+	//		// Здесь должен быть вызов метода backend для удаления книги
+	//	})))
+	//w.ShowAndRun()
 }
 
 func ConnectString(cfg *config.Config) string {
